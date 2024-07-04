@@ -1,31 +1,22 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import {Slot} from 'expo-router';
+import { Stack, SplashScreen} from 'expo-router/stack';
+import React, { useEffect } from 'react';
 
-const RootLayout = () => {
+// SplashScreen.preventAutoHideAsync();
+
+export default function Layout() {
+
+  // useEffect(() => {
+  //   if (error) throw error;
+  //   if (fontsLoaded) SplashScreen.hideAsync();
+  // }, [fontsLoaded, error]);
+
+  // if (!fontsLoaded) return null;
+  // if (!fontsLoaded && !error) return null;
+  
   return (
-    // <View style={styles.container}>
-    //   <Text style={styles.title}>Connexus</Text>
-      
-    // </View>
-    <Slot name="root"/>
-  )
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+    </Stack>
+  );
 }
-
-export default RootLayout
-
-// const styles = StyleSheet.create({
-//     container : {
-//         display : 'flex',
-//         flex: 1,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         backgroundColor: 'beige',
-//     },
-//     title : {
-//         fontSize: 60,
-//         fontWeight: 'bold',
-//         color: 'brown',
-
-//     }
-// })

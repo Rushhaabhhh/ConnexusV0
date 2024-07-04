@@ -1,26 +1,39 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native"; 
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, StatusBar } from "react-native";
+import { Link } from 'expo-router';
+import { SafeAreaView } from "react-native-safe-area-context";
+import CustomButton from "../components/CustomButton"; 
 
 export default function Page() {
-  const navigation = useNavigation(); 
-
-  const handleNavigation = () => {
-    // navigation.navigate(); 
-  };
-
+  
   return (
-    <View style={styles.container}>
-      <View style={styles.main}>
-        <Text style={styles.title}>Connexus</Text>
-        <Text style={styles.subtitle}>
-          Your all-in-one app for campus news, lost and found, events, and more.
-        </Text>
-        <TouchableOpacity style={styles.button} onPress={handleNavigation}>
-          <Text style={styles.buttonText}>Let's Get Started</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <SafeAreaView style={{height: "100%" }}>
+      <ScrollView contentContainerStyle={{height:'100%'}}>
+
+        <View style={styles.container}>
+          <View style={styles.main}>
+            <Text style={styles.title}>Connexus</Text> 
+
+            <Text style={styles.subtitle}>
+              Your all-in-one app for campus news, lost and found, events, and more.
+            </Text>
+            <Link href="/login" style={styles.button}>
+              <Text style={styles.buttonText}>Lets Get Started</Text>
+            </Link>
+
+          
+            {/* <CustomButton
+              handlePress={() => { } }
+              containerStyles={styles.containerStyles} textStyles={undefined} isLoading={undefined}            
+              /> */}
+
+
+          </View>
+        </View>
+       </ScrollView> 
+
+      <StatusBar />
+    </SafeAreaView>
   );
 }
 
@@ -54,12 +67,19 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 8,
     marginTop: 24,
-    minWidth: 200, 
-    alignItems: "center", 
+    minWidth: 180, 
   },
   buttonText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
+    alignContent: "center",
+  },
+  containerStyles: {
+    backgroundColor: "black",
+    padding: 14,
+    borderRadius: 8,
+    marginTop: 24,
+    minWidth: 180, 
   },
 });
