@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, GestureHandlerRootView } from 'react-native-gesture-handler';
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
 import { Link } from 'expo-router';
@@ -20,6 +20,7 @@ const Register = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <GestureHandlerRootView>
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View style={styles.content}>
           <Text style={styles.heading}>Ready? Are you!</Text>
@@ -64,6 +65,7 @@ const Register = () => {
           <Text style={styles.footer}>Connexus</Text>
         </View>
       </ScrollView>
+      </GestureHandlerRootView>
     </SafeAreaView>
   );
 };
