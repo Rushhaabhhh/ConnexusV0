@@ -1,38 +1,68 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Input, Button, Overlay } from 'react-native-elements';
+import { Link } from '@react-navigation/native';
+import { RegisterUser } from '../apicalls/users';
+import { router } from 'expo-router';
 import FormField from '../../components/FormField';
 import CustomButton from '../../components/CustomButton';
-import { Link } from 'expo-router';
+
 
 const Register = () => {
+
   const [form, setForm] = useState({
+    name: '',
     email: '',
     password: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const submit = () => {
-    // Handle form submission logic
+  const submit = async () => {
+    if (form.name === '' || form.email === '' || form.password === '') {
+      setErrorMessage('Please fill in all fields');
+      setErrorVisible(true);
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await RegisterUser(form.email, form.password, form.name);
+      router.push('/Profile');
+    } catch (error) {
+      setErrorMessage(error.message);
+      setErrorVisible(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollView}>
-        <View style={styles.content}>
-          <Text style={styles.heading}>Ready? Are you!</Text>
-          <Text style={styles.headingText}>Connexus: Your one-stop app for news, events, and campus life.</Text>
+      <GestureHandlerRootView>
+        <ScrollView contentContainerStyle={styles.scrollView}>
+          <View style={styles.content}>
+            <Text style={styles.heading}>Ready? Are you!</Text>
+            <Text style={styles.headingText}>
+              Connexus: Your one-stop app for news, events, and campus life.
+            </Text>
 
-          <FormField
-            value={form.name}
-            handleChangeText={(text) => setForm({ ...form, name: text })}
-            placeholder="Enter your name"
-            otherStyles={styles.input}
-          />
-
-          <FormField
+            <FormField
+              value={form.name}
+              handleChangeText={(text) => setForm({ ...form, name: text })}
+              placeholder="Enter your name"
+              otherStyles={styles.input}
+            />
+            <FormField
             value={form.email}
             handleChangeText={(text) => setForm({ ...form, email: text })}
             placeholder="Enter your email"
@@ -55,15 +85,23 @@ const Register = () => {
             isLoading={isSubmitting}
           />
 
-          <Text style={styles.middleText}>Already have an account?</Text>
+            <Text style={styles.middleText}>Already have an account?</Text>
+            <Link to="/login" style={styles.linkText}>
+              <Text>Log In</Text>
+            </Link>
 
-          <Link href="/login" style={styles.linkText}><Text>Log In</Text></Link>
+            <Text style={styles.middleText}>
+              By clicking sign up, you agree to our Terms of Service and Privacy Policy
+            </Text>
 
-          <Text style={styles.middleText}>By clicking sign up, you agree to our Terms of Service and Privacy Policy</Text>
+            <Text style={styles.footer}>Connexus</Text>
+          </View>
+        </ScrollView>
+      </GestureHandlerRootView>
 
-          <Text style={styles.footer}>Connexus</Text>
-        </View>
-      </ScrollView>
+      <Overlay isVisible={errorVisible} onBackdropPress={() => setErrorVisible(false)}>
+        <Text>{errorMessage}</Text>
+      </Overlay>
     </SafeAreaView>
   );
 };
